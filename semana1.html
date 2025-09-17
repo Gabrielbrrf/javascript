@@ -1,89 +1,129 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projetim de javaiscript</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projetim de JavaScript</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 12px 25px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #007BFF;
+      color: white;
+      transition: background 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background: #0056b3;
+      transform: scale(1.05);
+    }
+    .voltar {
+      background: #6c757d;
+    }
+    .voltar:hover {
+      background: #5a6268;
+    }
+  </style>
 </head>
 <body>
-    <h1>Projetim de javaiscript</h1>
-    <button onclick="ex1()">Par ou Ímpar</button>
-    <button onclick="ex2()">Número Primo</button>
-    <button onclick="ex3()">Fatorial</button>
-    <button onclick="ex4()">Tipo do Dado</button>
+  <h1>Projetim de JavaScript</h1>
+  <button onclick="ex1()">Par ou Ímpar</button>
+  <button onclick="ex2()">Número Primo</button>
+  <button onclick="ex3()">Fatorial</button>
+  <button onclick="ex4()">Tipo do Dado</button>
+  <br>
+  <button class="voltar" onclick="voltar()">⬅ Voltar</button>
 
-    <script>
-        // Exercício 1 de par ou impar
-        function ex1() {
-            let numero;
-            do {
-                numero = parseInt(prompt("Digite um número inteiro positivo:", ""));
-            } while (isNaN(numero) || numero <= 0);
+  <script>
+    // Exercício 1: Par ou Ímpar
+    function ex1() {
+      let numero;
+      do {
+        numero = parseInt(prompt("Digite um número inteiro positivo:", ""));
+      } while (isNaN(numero) || numero <= 0);
 
-            if (numero % 2 === 0) {
-                alert("Essa budega é par");
-            } else {
-                alert("essa é ímpar");
-            }
+      if (numero % 2 === 0) {
+        alert("O número " + numero + " é PAR");
+      } else {
+        alert("O número " + numero + " é ÍMPAR");
+      }
+    }
+
+    // Exercício 2: Número Primo
+    function ex2() {
+      let num, primo = true;
+
+      do {
+        num = parseInt(prompt("Digite um número inteiro MAIOR que 0:", ""));
+      } while (isNaN(num) || num <= 0);
+
+      if (num === 1) {
+        primo = false;
+      } else {
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+          if (num % i === 0) {
+            primo = false;
+            break;
+          }
         }
+      }
 
-        // Exercício 2 de numeros primos
-        function ex2() {
-            let num, primo = true;
+      if (primo) {
+        alert("O número " + num + " é PRIMO");
+      } else {
+        alert("O número " + num + " NÃO é primo");
+      }
+    }
 
-            do {
-                num = parseInt(prompt("Digite um número inteiro MAIOR DE 0:", ""));
-            } while (isNaN(num) || num <= 0);
+    // Exercício 3: Fatorial
+    function ex3() {
+      let numero;
+      do {
+        numero = parseInt(prompt("Digite um número inteiro MAIOR ou IGUAL a 0:", ""));
+      } while (isNaN(numero) || numero < 0);
 
-            if (num === 1) {
-                primo = false;
-            } else {
-                for (let i = 2; i <= Math.sqrt(num); i++) {
-                    if (num % i === 0) {
-                        primo = false;
-                        return;
-                    }
-                }
-            }
+      let fatorial = 1;
+      for (let i = 1; i <= numero; i++) {
+        fatorial *= i;
+      }
 
-            if (primo) {
-                alert(num + " primo");
-            } else {
-                alert(num + " não é primo");
-            }
+      alert("O fatorial de " + numero + " é " + fatorial);
+    }
+
+    // Exercício 4: Tipo do Dado
+    function ex4() {
+      let dado = prompt("Digite um valor:", "");
+
+      if (confirm("Quer ver o tipo do dado informado nhe ?")) {
+        let dadoConvertido = Number(dado);
+
+        if (!isNaN(dadoConvertido) && dado.trim() !== "") {
+          alert("O tipo do dado é: NÚMERO");
+        } else {
+          alert("O tipo do dado é: STRING");
         }
+      } else {
+        alert("Thaks pela visita");
+      }
+    }
 
-        // Exercício 3 de fatorial
-        function ex3() {
-            let numero;
-            do {
-                numero = parseInt(prompt("Digite um número inteiro MAIOR DE 0:", ""));
-            } while (isNaN(numero) || numero < 0);
-
-            let fatorial = 1;
-            for (let i = 1; i <= numero; i++) {
-                fatorial *= i;
-            }
-
-            alert("O fatorial de " + numero + " é " + fatorial);
-        }
-
-        // Exercício 4 qual dado é
-        function ex4() {
-            let dado = prompt("Digite um valor:", "");
-
-            if (confirm("Quer ver o tipo do dado informado?")) {
-                let dadoConvertido = Number(dado);
-
-                if (!isNaN(dadoConvertido) && dado.trim() !== "") {
-                    document.write("O tipo do dado é: número");
-                } else {
-                    document.write("O tipo do dado é: string");
-                }
-            } else {
-                document.write("Obrigado por visitar esta página");
-            }
-        }
-    </script>
+    // Função de voltar
+    function voltar() {
+      history.back();
+    }
+  </script>
 </body>
 </html>

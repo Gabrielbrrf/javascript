@@ -1,15 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercícios JavaScript</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      margin-bottom: 30px;
+      color: #333;
+    }
+    .box {
+      background: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 8px;
+      width: 400px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    #relogio {
+      font-size: 32px;
+      font-weight: bold;
+      color: #007BFF;
+      margin-top: 10px;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      cursor: pointer;
+      background: #007BFF;
+      color: white;
+      border: none;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .voltar {
+      background: #6c757d;
+      margin-top: 30px;
+    }
+    .voltar:hover {
+      background: #5a6268;
+    }
+  </style>
 </head>
 <body>
-   
-        <h1>Semana 2</h1>
-        <a href="index.html"> Voltar</a>
 
-    
+  <h1>Exercícios de Javaisript</h1>
+
+  <!-- Exercício 1 -->
+  <div class="box">
+    <h2>1. Data Atual</h2>
+    <p id="dataAtual"></p>
+  </div>
+
+  <!-- Exercício 2 -->
+  <div class="box">
+    <h2>2. Relógio em tempo real</h2>
+    <div id="relogio"></div>
+  </div>
+
+  <!-- Exercício 3 -->
+  <div class="box">
+    <h2>3. Palindromo</h2>
+    <input type="text" id="texto" placeholder="bota uma frase">
+    <br>
+    <button onclick="verificarPalindromo()">Verificar</button>
+  </div>
+
+  <!-- Botão de voltar -->
+  <button class="voltar" onclick="history.back()">⬅ Voltar</button>
+
+  <script>
+    // Exercício 1: Data atual fomart
+    function mostrarData() {
+      const hoje = new Date();
+      const dias = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", 
+                    "Quinta-feira", "Sexta-feira", "Sábado"];
+      const meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", 
+                     "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+      
+      let diaSemana = dias[hoje.getDay()];
+      let dia = hoje.getDate();
+      let mes = meses[hoje.getMonth()];
+      let ano = hoje.getFullYear();
+      
+      document.getElementById("dataAtual").textContent =
+        `${diaSemana}, ${dia} de ${mes} de ${ano}`;
+    }
+
+    // Exercício 2: Relógio atualizado  
+    function atualizarRelogio() {
+      const agora = new Date();
+      let horas = String(agora.getHours()).padStart(2, '0');
+      let minutos = String(agora.getMinutes()).padStart(2, '0');
+      let segundos = String(agora.getSeconds()).padStart(2, '0');
+      document.getElementById("relogio").textContent =
+        `${horas}:${minutos}:${segundos}`;
+      setTimeout(atualizarRelogio, 1000); // atualiza a cada 1s 
+    }
+
+    // Exercício 3: Verificar se e palíndromo
+    function verificarPalindromo() {
+      let texto = document.getElementById("texto").value.toLowerCase();
+      // remove espaços e acentos
+      texto = texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
+      let invertido = texto.split("").reverse().join("");
+      
+      if (texto === "") {
+        alert("Digite um texto primeiro abensoado ");
+      } else if (texto === invertido) {
+        alert("É um palíndromo!");
+      } else {
+        alert("Não é um palíndromo faz o L ");
+      }
+    }
+
+    // Inicializa data e relógio
+    mostrarData();
+    atualizarRelogio();
+  </script>
+
 </body>
 </html>

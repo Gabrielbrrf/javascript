@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playlist Interativa</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f9; text-align: center; padding: 40px; }
+    h1 { color: #333; }
+    .container { background: #fff; padding: 20px; border-radius: 10px; width: 400px; margin: auto; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+    input { width: 70%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; }
+    button { padding: 10px 15px; margin: 5px; border: none; border-radius: 6px; cursor: pointer; background: #007BFF; color: white; transition: background 0.3s, transform 0.2s; }
+    button:hover { background: #0056b3; transform: scale(1.05); }
+    ul { list-style: none; padding: 0; }
+    li { background: #f1f1f1; margin: 8px 0; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .actions button { background: #6c757d; margin-left: 5px; }
+    .actions button:hover { background: #5a6268; }
+  </style>
+</head>
+<body>
+
+<h1>🎵 Minha Playlist</h1>
+<div class="container">
+  <input type="text" id="musica" placeholder="Digite o nome da música">
+  <button onclick="adicionar()">Adicionar (push)</button>
+  <button onclick="adicionarInicio()">Adicionar no Início (unshift)</button>
+  <button onclick="ordenar()">Ordenar</button>
+  <button onclick="removerUltima()">Remover Última (pop)</button>
+  <button onclick="removerPrimeira()">Remover Primeira (shift)</button>
+  <button onclick="voltarPagina()">Voltar</button>
+
+  <ul id="playlist"></ul>
+</div>
+
+<script>
+let playlist = [];
+
+function atualizarLista() {
+  const ul = document.getElementById("playlist");
+  ul.innerHTML = "";
+  for (let musica of playlist) {
+    let li = document.createElement("li");
+    li.textContent = musica;
+
+    let div = document.createElement("div");
+    div.classList.add("actions");
+
+    let btnEditar = document.createElement("button");
+    btnEditar.textContent = "✏ Editar";
+    btnEditar.onclick = () => editar(musica);
+
+    let btnExcluir = document.createElement("button");
+    btnExcluir.textContent = "❌ Excluir";
+    btnExcluir.onclick = () => excluir(musica);
+
+    div.appendChild(btnEditar);
+    div.appendChild(btnExcluir);
+    li.appendChild(div);
+    ul.appendChild(li);
+  }
+}
+
+function adicionar() {
+  let musica = document.getElementById("musica").value.trim();
+  if (musica) {
+    playlist.push(musica);
+    document.getElementById("musica").value = "";
+    atualizarLista();
+  } else {
+    alert("Digite o nome da música!");
+  }
+}
+
+function adicionarInicio() {
+  let musica = document.getElementById("musica").value.trim();
+  if (musica) {
+    playlist.unshift(musica);
+    document.getElementById("musica").value = "";
+    atualizarLista();
+  } else {
+    alert("Digite o nome da música!");
+  }
+}
+
+function removerUltima() {
+  playlist.pop();
+  atualizarLista();
+}
+
+function removerPrimeira() {
+  playlist.shift();
+  atualizarLista();
+}
+
+function ordenar() {
+  playlist.sort();
+  atualizarLista();
+}
+
+function excluir(nome) {
+  playlist = playlist.filter(musica => musica !== nome);
+  atualizarLista();
+}
+
+function editar(nome) {
+  let novoNome = prompt("Edite o nome da música:", nome);
+  if (novoNome && novoNome.trim() !== "") {
+    let index = playlist.indexOf(nome);
+    playlist[index] = novoNome.trim();
+    atualizarLista();
+  }
+}
+
+function voltarPagina() {
+  history.back(); // volta para a página anterior do navegador
+}
+</script>
+
+</body>
+</html>

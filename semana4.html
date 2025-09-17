@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulário de Cadastro</title>
+  <style>
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      background: #f4f4f9;
+      text-align: center;
+      margin-top: 30px;
+    }
+    h1 {
+      font-size: 26px;
+      color: #000;
+    }
+    form {
+      width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    label {
+      font-size: 10px;
+      color: rgba(34,34,34,0.9);
+      display: block;
+      margin-top: 15px;
+    }
+    input {
+      font-size: 12px;
+      width: 100%;
+      padding: 5px;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      color: #333;
+    }
+    .row {
+      display: flex;
+      gap: 15px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    .error {
+      font-size: 10px;
+      color: red;
+    }
+    button {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      padding: 10px 20px;
+      margin: 15px 5px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      background: #eee;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #ddd;
+    }
+    .radio-group {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Formulário de Cadastro</h1>
+  <form id="cadastroForm">
+    
+    <label>Nome:</label>
+    <input type="text" id="nome" placeholder="Digite seu nome completo">
+    <div class="error" id="nomeError"></div>
+    
+    <div class="row">
+      <div>
+        <label>Email:</label>
+        <input type="text" id="email" placeholder="fulano@email.com">
+        <div class="error" id="emailError"></div>
+      </div>
+      <div>
+        <label>Data Nascimento:</label>
+        <input type="text" id="dataNascimento" placeholder="dd/mm/aaaa">
+        <div class="error" id="dataError"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Telefone Fixo:</label>
+        <input type="text" id="telefoneFixo" placeholder="(99)9999-9999">
+        <div class="error" id="fixoError"></div>
+      </div>
+      <div>
+        <label>Telefone Celular:</label>
+        <input type="text" id="telefoneCel" placeholder="(99)99999-9999">
+        <div class="error" id="celError"></div>
+      </div>
+    </div>
+
+    <div class="radio-group">
+      <input type="radio" name="perfil" id="prof" value="professor"> Professor
+      <input type="radio" name="perfil" id="aluno" value="aluno"> Aluno
+    </div>
+
+    <div id="extraCampos"></div>
+
+    <div style="text-align:center;">
+      <button type="submit">Enviar</button>
+      <button type="reset">Redefinir</button>
+    </div>
+  </form>
+
+  <script>
+    // Classes
+    class Pessoa {
+      constructor(nome, email, dataNascimento, telefoneFixo, telefoneCel) {
+        this.nome = nome;
+        this.email = email;
+        this.dataNascimento = dataNascimento;
+        this.telefoneFixo = telefoneFixo;
+        this.telefoneCel = telefoneCel;
+      }
+    }
+
+    class Aluno extends Pessoa {
+      constructor(nome, email, dataNascimento, telefoneFixo, telefoneCel, curso, matricula) {
+        super(nome, email, dataNascimento, telefoneFixo, telefoneCel);
+        this.curso = curso;
+        this.matricula = matricula;
+      }
+    }
+
+    class Professor extends Pessoa {
+      constructor(nome, email, dataNascimento, telefoneFixo, telefoneCel, area, matricula, lattes) {
+        super(nome, email, dataNascimento, telefoneFixo, telefoneCel);
+        this.area = area;
+        this.matricula = matricula;
+        this.lattes = lattes;
+      }
+    }
+
+    // Dinâmica de campos
+    const extraCampos = document.getElementById("extraCampos");
+    document.getElementById("prof").addEventListener("change", () => {
+      extraCampos.innerHTML = `
+        <label>Área:</label>
+        <input type="text" id="area" placeholder="Digite sua área de atuação">
+        <div class="error" id="areaError"></div>
+        
+        <label>Matrícula:</label>
+        <input type="text" id="matricula" placeholder="5 dígitos">
+        <div class="error" id="matriculaError"></div>
+        
+        <label>Lattes:</label>
+        <input type="text" id="lattes" placeholder="Digite o link do seu Lattes">
+        <div class="error" id="lattesError"></div>
+      `;
+    });
+
+    document.getElementById("aluno").addEventListener("change", () => {
+      extraCampos.innerHTML = `
+        <label>Curso:</label>
+        <input type="text" id="curso" placeholder="Digite seu curso">
+        <div class="error" id="cursoError"></div>
+        
+        <label>Matrícula:</label>
+        <input type="text" id="matricula" placeholder="10 dígitos">
+        <div class="error" id="matriculaError"></div>
+      `;
+    });
+
+    // pra poder colocar os parentese e traço
+    function aplicarMascaraTelefone(input) {
+      input.addEventListener("input", function() {
+        let valor = input.value.replace(/\D/g, ""); // só números
+
+        if (valor.length <= 10) {
+          // Telefone fixo (10 dígitos)
+          valor = valor.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1)$2-$3");
+        } else {
+          // Celular (11 dígitos)
+          valor = valor.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, "($1)$2-$3");
+        }
+
+        input.value = valor;
+      });
+    }
+
+    aplicarMascaraTelefone(document.getElementById("telefoneFixo"));
+    aplicarMascaraTelefone(document.getElementById("telefoneCel"));
+
+    // Funções de validação
+    function validarEmail(email) {
+      return /^[^@]+@[^@]+\.[^@]+$/.test(email);
+    }
+    function validarData(data) {
+      return /^\d{2}\/\d{2}\/\d{4}$/.test(data);
+    }
+    function validarTelefone(tel) {
+      return /^\(\d{2}\)\d{4,5}-\d{4}$/.test(tel);
+    }
+
+    // Eventos de validação
+    document.getElementById("cadastroForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      let nome = document.getElementById("nome").value.trim();
+      let email = document.getElementById("email").value.trim();
+      let dataNascimento = document.getElementById("dataNascimento").value.trim();
+      let telefoneFixo = document.getElementById("telefoneFixo").value.trim();
+      let telefoneCel = document.getElementById("telefoneCel").value.trim();
+
+      let perfil = document.querySelector("input[name='perfil']:checked");
+      let valido = true;
+
+      // Reset erros
+      document.querySelectorAll(".error").forEach(el => el.textContent = "");
+
+      if (!nome) { document.getElementById("nomeError").textContent = "Nome obrigatório"; valido = false; }
+      if (!validarEmail(email)) { document.getElementById("emailError").textContent = "Email inválido"; valido = false; }
+      if (!validarData(dataNascimento)) { document.getElementById("dataError").textContent = "Data inválida"; valido = false; }
+      if (!validarTelefone(telefoneFixo)) { document.getElementById("fixoError").textContent = "Telefone inválido"; valido = false; }
+      if (!validarTelefone(telefoneCel)) { document.getElementById("celError").textContent = "Celular inválido"; valido = false; }
+
+      let objFinal = null;
+
+      if (perfil) {
+        if (perfil.value === "professor") {
+          let area = document.getElementById("area").value.trim();
+          let matricula = document.getElementById("matricula").value.trim();
+          let lattes = document.getElementById("lattes").value.trim();
+
+          if (!area) { document.getElementById("areaError").textContent = "Área obrigatória"; valido = false; }
+          if (!/^\d{5}$/.test(matricula)) { document.getElementById("matriculaError").textContent = "Matrícula deve ter 5 dígitos"; valido = false; }
+          if (!lattes) { document.getElementById("lattesError").textContent = "Lattes obrigatório"; valido = false; }
+
+          if (valido) objFinal = new Professor(nome, email, dataNascimento, telefoneFixo, telefoneCel, area, matricula, lattes);
+        } 
+        else if (perfil.value === "aluno") {
+          let curso = document.getElementById("curso").value.trim();
+          let matricula = document.getElementById("matricula").value.trim();
+
+          if (!curso) { document.getElementById("cursoError").textContent = "Curso obrigatório"; valido = false; }
+          if (!/^\d{10}$/.test(matricula)) { document.getElementById("matriculaError").textContent = "Matrícula deve ter 10 dígitos"; valido = false; }
+
+          if (valido) objFinal = new Aluno(nome, email, dataNascimento, telefoneFixo, telefoneCel, curso, matricula);
+        }
+      } else {
+        alert("Selecione Professor ou Aluno");
+        valido = false;
+      }
+
+      if (valido && objFinal) {
+        console.log("Objeto criado:", objFinal);
+        alert("Cadastro realizado com sucesso!");
+      }
+    });
+  </script>
+</body>
+</html>
